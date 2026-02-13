@@ -1,0 +1,20 @@
+name: example
+description: Example app demonstrating bloc_effect usage.
+version: 0.1.0+1
+publish_to: none
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.0.0
+  flutter_bloc_effect:
+    path: ../packages/flutter_bloc_effect
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+resolution: workspace

@@ -1,0 +1,55 @@
+name: bloc_effect_workspace
+publish_to: none
+
+environment:
+  sdk: ^3.9.2
+
+workspace:
+  - packages/bloc_effect
+  - packages/flutter_bloc_effect
+  - packages/bloc_effect_test
+  - example
+
+dev_dependencies:
+  melos: ^7.4.0
+
+melos:
+  name: bloc_effect_workspace
+  repository: https://github.com/aspect-build/bloc_effect
+
+  scripts:
+    analyze:
+      description: Run static analysis across all packages.
+      run: dart analyze --fatal-infos
+      exec:
+        concurrency: 3
+
+    format:
+      description: Check formatting across all packages.
+      run: dart format --set-exit-if-changed .
+      exec:
+        concurrency: 3
+
+    test:
+      description: Run tests across all packages.
+      run: dart test
+      packageFilters:
+        dirExists: test
+      exec:
+        concurrency: 1
+
+    test:flutter:
+      description: Run Flutter tests for widget packages.
+      run: flutter test
+      packageFilters:
+        dependsOn: flutter
+        dirExists: test
+
+    publish:
+      description: Publish all packages to pub.dev (dry run).
+      run: dart pub publish --dry-run
+      packageFilters:
+        noPrivate: true
+      exec:
+        concurrency: 1
+        orderDependents: true
