@@ -1,0 +1,24 @@
+name: flutter_bloc_one_shot
+description: >
+  Flutter widgets for bloc_one_shot. Provides SideEffectListener and SideEffectConsumer
+  widgets that mirror BlocListener/BlocConsumer API conventions.
+version: 0.1.0
+homepage: https://github.com/aspect-build/bloc_one_shot
+repository: https://github.com/aspect-build/bloc_one_shot/tree/main/packages/flutter_bloc_one_shot
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.0.0
+  bloc_one_shot:
+    path: ../bloc_one_shot
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  bloc_test: ^10.0.0
+
+resolution: workspace
