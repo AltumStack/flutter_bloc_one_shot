@@ -23,24 +23,51 @@ jobs:
           channel: stable
           cache: true
 
-      # Cache Pub Dependencies
-      - name: 📦 Cache Pub Dependencies
-        uses: actions/cache@v5
-        with:
-          path: |
-            ~/.pub-cache
-            .dart_tool
-          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pub-
+      # Install Melos
+      - name: 📦 Install Melos
+        run: dart pub global activate melos
 
-      # Install Project Dependencies
-      - name: 🚀 Install Dependencies
-        run: flutter pub get
+      # Bootstrap Workspace
+      - name: 🔗 Bootstrap Workspace
+        run: melos bootstrap
 
-      # Run Tests with Code Coverage
-      - name: ✅ Run Unit Tests with Coverage
-        run: flutter test --coverage
+      # Run Dart Tests with Coverage (bloc_effect, bloc_effect_test)
+      - name: ✅ Run Dart Tests with Coverage
+        run: |
+          cd packages/bloc_effect
+          dart test --coverage=coverage
+          dart pub global activate coverage
+          format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib
+          cd ../..
+
+      # Run Flutter Tests with Coverage (flutter_bloc_effect)
+      - name: ✅ Run Flutter Tests with Coverage
+        run: |
+          cd packages/flutter_bloc_effect
+          flutter test --coverage
+          cd ../..
+
+      # Run bloc_effect_test Tests
+      - name: ✅ Run Test Helper Tests
+        run: |
+          cd packages/bloc_effect_test
+          dart test
+          cd ../..
+
+      # Merge Coverage Reports
+      - name: 📋 Merge Coverage Reports
+        run: |
+          mkdir -p coverage
+          LCOV_ARGS=""
+          for f in packages/*/coverage/lcov.info; do
+            if [ -f "$f" ]; then
+              LCOV_ARGS="$LCOV_ARGS -a $f"
+            fi
+          done
+          if [ -n "$LCOV_ARGS" ]; then
+            sudo apt-get install -y lcov > /dev/null 2>&1
+            lcov $LCOV_ARGS -o coverage/lcov.info
+          fi
 
       # Upload Coverage Report as Artifact
       - name: 📊 Upload Coverage Report
