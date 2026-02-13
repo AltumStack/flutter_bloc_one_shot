@@ -31,8 +31,8 @@ jobs:
       - name: 🔗 Bootstrap Workspace
         run: melos bootstrap
 
-      # Run Dart Tests with Coverage (bloc_one_shot, bloc_one_shot_test)
-      - name: ✅ Run Dart Tests with Coverage
+      # Run Dart Tests with Coverage (bloc_one_shot)
+      - name: ✅ Run bloc_one_shot Tests with Coverage
         run: |
           cd packages/bloc_one_shot
           dart test --coverage=coverage
@@ -41,47 +41,52 @@ jobs:
           cd ../..
 
       # Run Flutter Tests with Coverage (flutter_bloc_one_shot)
-      - name: ✅ Run Flutter Tests with Coverage
+      - name: ✅ Run flutter_bloc_one_shot Tests with Coverage
         run: |
           cd packages/flutter_bloc_one_shot
           flutter test --coverage
           cd ../..
 
       # Run bloc_one_shot_test Tests
-      - name: ✅ Run Test Helper Tests
+      - name: ✅ Run bloc_one_shot_test Tests
         run: |
           cd packages/bloc_one_shot_test
           dart test
           cd ../..
 
-      # Merge Coverage Reports
+      # Upload bloc_one_shot Coverage
+      - name: ☁️ Upload bloc_one_shot Coverage
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/bloc_one_shot/coverage/lcov.info
+          flags: bloc_one_shot
+          name: bloc_one_shot
+          fail_ci_if_error: true
+
+      # Upload flutter_bloc_one_shot Coverage
+      - name: ☁️ Upload flutter_bloc_one_shot Coverage
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/flutter_bloc_one_shot/coverage/lcov.info
+          flags: flutter_bloc_one_shot
+          name: flutter_bloc_one_shot
+          fail_ci_if_error: true
+
+      # Merge and Upload Combined Coverage
       - name: 📋 Merge Coverage Reports
         run: |
+          sudo apt-get install -y lcov > /dev/null 2>&1
           mkdir -p coverage
-          LCOV_ARGS=""
-          for f in packages/*/coverage/lcov.info; do
-            if [ -f "$f" ]; then
-              LCOV_ARGS="$LCOV_ARGS -a $f"
-            fi
-          done
-          if [ -n "$LCOV_ARGS" ]; then
-            sudo apt-get install -y lcov > /dev/null 2>&1
-            lcov $LCOV_ARGS -o coverage/lcov.info
-          fi
+          lcov \
+            -a packages/bloc_one_shot/coverage/lcov.info \
+            -a packages/flutter_bloc_one_shot/coverage/lcov.info \
+            -o coverage/lcov.info
 
-      # Upload Coverage Report as Artifact
-      - name: 📊 Upload Coverage Report
+      # Upload Combined Coverage Report as Artifact
+      - name: 📊 Upload Coverage Artifact
         uses: actions/upload-artifact@v6
         with:
           name: coverage-report
           path: coverage/lcov.info
-
-      # Upload Coverage to Codecov
-      - name: ☁️ Upload Coverage to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage/lcov.info
-          flags: unittests
-          name: codecov-flutter
-          fail_ci_if_error: true
