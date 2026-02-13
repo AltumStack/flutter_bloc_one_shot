@@ -13,8 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^9.0.0
-  bloc_one_shot:
-    path: ../bloc_one_shot
+  bloc_one_shot: ^0.1.0
 
 dev_dependencies:
   flutter_test:
