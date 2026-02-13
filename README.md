@@ -3,7 +3,7 @@
 [![bloc_one_shot](https://img.shields.io/pub/v/bloc_one_shot.svg?label=bloc_one_shot)](https://pub.dev/packages/bloc_one_shot)
 [![flutter_bloc_one_shot](https://img.shields.io/pub/v/flutter_bloc_one_shot.svg?label=flutter_bloc_one_shot)](https://pub.dev/packages/flutter_bloc_one_shot)
 [![bloc_one_shot_test](https://img.shields.io/pub/v/bloc_one_shot_test.svg?label=bloc_one_shot_test)](https://pub.dev/packages/bloc_one_shot_test)
-[![codecov](https://codecov.io/gh/AltumStack/flutter_bloc_one_shot/graph/badge.svg?token=P5G36QKKTP)](https://app.codecov.io/github/AltumStack/flutter_bloc_one_shot)
+[![codecov](https://codecov.io/gh/AltumStack/flutter_bloc_one_shot/branch/master/graph/badge.svg)](https://app.codecov.io/github/AltumStack/flutter_bloc_one_shot)
 A side-effect system for Flutter BLoC. Separate **what the screen IS** (state) from **what the screen DOES** (effects).
 
 Side effects like navigation, snackbars, and dialogs are ephemeral one-shot actions that don't belong in persistent state. `bloc_one_shot` introduces a **dual-channel architecture** where your Bloc exposes two outputs: **State** and **Effect**.
