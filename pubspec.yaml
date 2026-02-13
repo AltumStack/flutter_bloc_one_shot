@@ -1,21 +1,21 @@
-name: bloc_effect_workspace
+name: bloc_one_shot_workspace
 publish_to: none
 
 environment:
   sdk: ^3.9.2
 
 workspace:
-  - packages/bloc_effect
-  - packages/flutter_bloc_effect
-  - packages/bloc_effect_test
+  - packages/bloc_one_shot
+  - packages/flutter_bloc_one_shot
+  - packages/bloc_one_shot_test
   - example
 
 dev_dependencies:
   melos: ^7.4.0
 
 melos:
-  name: bloc_effect_workspace
-  repository: https://github.com/aspect-build/bloc_effect
+  name: bloc_one_shot_workspace
+  repository: https://github.com/aspect-build/bloc_one_shot
 
   scripts:
     analyze:

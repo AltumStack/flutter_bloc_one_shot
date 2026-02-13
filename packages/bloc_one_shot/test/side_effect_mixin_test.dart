@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:bloc_effect/bloc_effect.dart';
+import 'package:bloc_one_shot/bloc_one_shot.dart';
 import 'package:test/test.dart';
 
 // --- Test helpers ---

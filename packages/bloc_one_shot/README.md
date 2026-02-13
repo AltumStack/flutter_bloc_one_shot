@@ -1,13 +1,13 @@
-# bloc_effect
+# bloc_one_shot
 
-[![pub package](https://img.shields.io/pub/v/bloc_effect.svg)](https://pub.dev/packages/bloc_effect)
+[![pub package](https://img.shields.io/pub/v/bloc_one_shot.svg)](https://pub.dev/packages/bloc_one_shot)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Core Dart package for managing side effects in BLoC. Provides a buffered `EffectController`, `SideEffectMixin` for Bloc/Cubit, and a global `EffectObserver`.
 
-> **For Flutter widgets** (`SideEffectListener`, `SideEffectConsumer`), see [`flutter_bloc_effect`](https://pub.dev/packages/flutter_bloc_effect).
+> **For Flutter widgets** (`SideEffectListener`, `SideEffectConsumer`), see [`flutter_bloc_one_shot`](https://pub.dev/packages/flutter_bloc_one_shot).
 >
-> **For test utilities** (`blocEffectTest`), see [`bloc_effect_test`](https://pub.dev/packages/bloc_effect_test).
+> **For test utilities** (`blocEffectTest`), see [`bloc_one_shot_test`](https://pub.dev/packages/bloc_one_shot_test).
 
 ## The Problem
 
@@ -21,7 +21,7 @@ In Flutter BLoC, side effects like navigation, snackbars, and dialogs are epheme
 
 ## The Solution
 
-`bloc_effect` introduces a **dual-channel architecture**: your Bloc emits **State** (what the screen IS) and **Effect** (what the screen DOES) through separate channels.
+`bloc_one_shot` introduces a **dual-channel architecture**: your Bloc emits **State** (what the screen IS) and **Effect** (what the screen DOES) through separate channels.
 
 ```
 ┌─────────────┐
@@ -40,7 +40,7 @@ Builder  Listener
 
 ```yaml
 dependencies:
-  bloc_effect: ^0.1.0
+  bloc_one_shot: ^0.1.0
 ```
 
 ## Usage
@@ -201,7 +201,7 @@ class AppEffectObserver extends EffectObserver {
 
 ## Comparison with Alternatives
 
-| Feature | `bloc_effect` | `bloc_presentation` | `bloc_effects` | `side_effect_bloc` |
+| Feature | `bloc_one_shot` | `bloc_presentation` | `bloc_one_shots` | `side_effect_bloc` |
 |---|---|---|---|---|
 | Buffering | Yes | No | No | No |
 | Re-subscription safe | Yes | No | No | No |

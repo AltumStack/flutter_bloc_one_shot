@@ -1,11 +1,10 @@
-# bloc_effect
+# bloc_one_shot
 
-[![Pub Version](https://img.shields.io/pub/v/bloc_effect.svg)](https://pub.dev/packages/bloc_effect)
-[![codecov](https://codecov.io/gh/aspect-build/bloc_effect/graph/badge.svg)](https://codecov.io/gh/aspect-build/bloc_effect)
-
+[![Pub Version](https://img.shields.io/pub/v/bloc_one_shot.svg)](https://pub.dev/packages/bloc_one_shot)
+[![codecov](https://codecov.io/gh/AltumStack/flutter_bloc_one_shot/graph/badge.svg?token=P5G36QKKTP)](https://codecov.io/gh/AltumStack/flutter_bloc_one_shot)
 A side-effect system for Flutter BLoC. Separate **what the screen IS** (state) from **what the screen DOES** (effects).
 
-Side effects like navigation, snackbars, and dialogs are ephemeral one-shot actions that don't belong in persistent state. `bloc_effect` introduces a **dual-channel architecture** where your Bloc exposes two outputs: **State** and **Effect**.
+Side effects like navigation, snackbars, and dialogs are ephemeral one-shot actions that don't belong in persistent state. `bloc_one_shot` introduces a **dual-channel architecture** where your Bloc exposes two outputs: **State** and **Effect**.
 
 ## Why?
 
@@ -15,7 +14,7 @@ Modeling side effects as state causes:
 - **Ghost states** — `ShowSnackbar` lingers in state after the snackbar is dismissed
 - **Cleanup boilerplate** — you need artificial resets like `emit(state.copyWith(snackbar: null))`
 
-`bloc_effect` solves this with a dedicated effect channel that is fire-and-forget.
+`bloc_one_shot` solves this with a dedicated effect channel that is fire-and-forget.
 
 ## Features
 
@@ -31,24 +30,24 @@ Modeling side effects as state causes:
 
 | Package | Description | pub.dev |
 |---|---|---|
-| [`bloc_effect`](packages/bloc_effect/) | Core Dart package — `EffectController`, `SideEffectMixin`, `EffectObserver` | — |
-| [`flutter_bloc_effect`](packages/flutter_bloc_effect/) | Flutter widgets — `SideEffectListener`, `SideEffectConsumer` | — |
-| [`bloc_effect_test`](packages/bloc_effect_test/) | Test utilities — `blocEffectTest()` | — |
+| [`bloc_one_shot`](packages/bloc_one_shot/) | Core Dart package — `EffectController`, `SideEffectMixin`, `EffectObserver` | — |
+| [`flutter_bloc_one_shot`](packages/flutter_bloc_one_shot/) | Flutter widgets — `SideEffectListener`, `SideEffectConsumer` | — |
+| [`bloc_one_shot_test`](packages/bloc_one_shot_test/) | Test utilities — `blocEffectTest()` | — |
 
 ## Installation
 
 ```yaml
 dependencies:
-  flutter_bloc_effect: ^0.1.0
+  flutter_bloc_one_shot: ^0.1.0
 ```
 
-`flutter_bloc_effect` re-exports `bloc_effect`, so a single dependency is all you need.
+`flutter_bloc_one_shot` re-exports `bloc_one_shot`, so a single dependency is all you need.
 
 For testing:
 
 ```yaml
 dev_dependencies:
-  bloc_effect_test: ^0.1.0
+  bloc_one_shot_test: ^0.1.0
 ```
 
 ## Quick Start
@@ -223,10 +222,10 @@ This project uses a Dart workspace. To get started:
 dart pub get
 
 # Run all Dart tests
-dart test packages/bloc_effect/test/ packages/bloc_effect_test/test/
+dart test packages/bloc_one_shot/test/ packages/bloc_one_shot_test/test/
 
 # Run Flutter widget tests
-flutter test packages/flutter_bloc_effect/test/
+flutter test packages/flutter_bloc_one_shot/test/
 
 # Static analysis
 dart analyze packages/
@@ -237,4 +236,4 @@ dart format --set-exit-if-changed packages/
 
 ## License
 
-MIT — see [LICENSE](packages/bloc_effect/LICENSE) for details.
+MIT — see [LICENSE](packages/bloc_one_shot/LICENSE) for details.

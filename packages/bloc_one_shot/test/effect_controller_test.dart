@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bloc_effect/src/effect_controller.dart';
+import 'package:bloc_one_shot/src/effect_controller.dart';
 import 'package:test/test.dart';
 
 void main() {

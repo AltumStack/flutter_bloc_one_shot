@@ -2,7 +2,7 @@
 ///
 /// Provides a buffered [EffectController], [SideEffectMixin] for Bloc/Cubit,
 /// and global [EffectObserver] for logging and analytics.
-library bloc_effect;
+library bloc_one_shot;
 
 export 'src/effect_controller.dart';
 export 'src/effect_observer.dart';

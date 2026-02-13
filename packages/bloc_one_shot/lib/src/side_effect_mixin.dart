@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:bloc_effect/src/effect_controller.dart';
-import 'package:bloc_effect/src/effect_observer.dart';
+import 'package:bloc_one_shot/src/effect_controller.dart';
+import 'package:bloc_one_shot/src/effect_observer.dart';
 
 /// A mixin that adds side-effect emission capability to any [Bloc] or [Cubit].
 ///

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc_effect/flutter_bloc_effect.dart';
+import 'package:flutter_bloc_one_shot/flutter_bloc_one_shot.dart';
 
 // --- Effects ---
 
@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'bloc_effect Demo',
+      title: 'bloc_one_shot Demo',
       theme: ThemeData(
         colorSchemeSeed: Colors.deepPurple,
         useMaterial3: true,

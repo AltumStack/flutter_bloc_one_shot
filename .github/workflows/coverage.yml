@@ -31,26 +31,26 @@ jobs:
       - name: 🔗 Bootstrap Workspace
         run: melos bootstrap
 
-      # Run Dart Tests with Coverage (bloc_effect, bloc_effect_test)
+      # Run Dart Tests with Coverage (bloc_one_shot, bloc_one_shot_test)
       - name: ✅ Run Dart Tests with Coverage
         run: |
-          cd packages/bloc_effect
+          cd packages/bloc_one_shot
           dart test --coverage=coverage
           dart pub global activate coverage
           format_coverage --lcov --in=coverage --out=coverage/lcov.info --report-on=lib
           cd ../..
 
-      # Run Flutter Tests with Coverage (flutter_bloc_effect)
+      # Run Flutter Tests with Coverage (flutter_bloc_one_shot)
       - name: ✅ Run Flutter Tests with Coverage
         run: |
-          cd packages/flutter_bloc_effect
+          cd packages/flutter_bloc_one_shot
           flutter test --coverage
           cd ../..
 
-      # Run bloc_effect_test Tests
+      # Run bloc_one_shot_test Tests
       - name: ✅ Run Test Helper Tests
         run: |
-          cd packages/bloc_effect_test
+          cd packages/bloc_one_shot_test
           dart test
           cd ../..
 
