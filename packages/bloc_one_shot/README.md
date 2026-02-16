@@ -199,6 +199,25 @@ class AppEffectObserver extends EffectObserver {
 | `onEffect(bloc, effect)` | `void` | Called on every `emitEffect` across the app |
 | `EffectObserver.instance` | `static EffectObserver?` | Global instance — set at app startup |
 
+### `CompositeEffectObserver`
+
+An `EffectObserver` that delegates to multiple child observers. Use this when you need several independent observers (e.g. logging, analytics, crash reporting) without manually combining them into a single class.
+
+```dart
+void main() {
+  EffectObserver.instance = CompositeEffectObserver([
+    LoggingEffectObserver(),
+    AnalyticsEffectObserver(),
+    SentryEffectObserver(),
+  ]);
+  runApp(MyApp());
+}
+```
+
+| Member | Type | Description |
+|---|---|---|
+| `observers` | `List<EffectObserver>` | The list of child observers to notify |
+
 ## Comparison with Alternatives
 
 | Feature | `bloc_one_shot` | `bloc_presentation` | `bloc_one_shots` | `side_effect_bloc` |
