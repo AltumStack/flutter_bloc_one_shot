@@ -36,7 +36,7 @@ Modeling side effects as state causes:
 
 | Package | Description | Version |
 | --- | --- | --- |
-| [`bloc_one_shot`](packages/bloc_one_shot/) | Core Dart package — `EffectController`, `SideEffectMixin`, `EffectObserver` | `0.1.0` |
+| [`bloc_one_shot`](packages/bloc_one_shot/) | Core Dart package — `EffectController`, `SideEffectMixin`, `EffectObserver`, `CompositeEffectObserver` | `0.2.0` |
 | [`flutter_bloc_one_shot`](packages/flutter_bloc_one_shot/) | Flutter widgets — `SideEffectProvider`, `SideEffectListener`, `SideEffectConsumer`, `MultipleSideEffectListener` | `0.2.0` |
 | [`bloc_one_shot_test`](packages/bloc_one_shot_test/) | Test utilities — `blocEffectTest()` | `0.1.0` |
 
@@ -194,6 +194,16 @@ class LoggingEffectObserver extends EffectObserver {
 }
 ```
 
+Use `CompositeEffectObserver` to combine multiple observers:
+
+```dart
+EffectObserver.instance = CompositeEffectObserver([
+  LoggingEffectObserver(),
+  AnalyticsEffectObserver(),
+  SentryEffectObserver(),
+]);
+```
+
 ## Testing
 
 Use `blocEffectTest` to verify both states and effects:
@@ -261,6 +271,10 @@ Buffered broadcast stream controller. Effects emitted before any listener subscr
 ### `EffectObserver`
 
 Set `EffectObserver.instance` at app startup to observe all effects globally.
+
+### `CompositeEffectObserver`
+
+An `EffectObserver` that delegates to multiple child observers. Accepts a `List<EffectObserver>`.
 
 ## How Buffering Works
 
