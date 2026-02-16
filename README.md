@@ -37,7 +37,7 @@ Modeling side effects as state causes:
 | Package | Description | Version |
 | --- | --- | --- |
 | [`bloc_one_shot`](packages/bloc_one_shot/) | Core Dart package — `EffectController`, `SideEffectMixin`, `EffectObserver` | `0.1.0` |
-| [`flutter_bloc_one_shot`](packages/flutter_bloc_one_shot/) | Flutter widgets — `SideEffectListener`, `SideEffectConsumer`, `MultipleSideEffectListener` | `0.2.0` |
+| [`flutter_bloc_one_shot`](packages/flutter_bloc_one_shot/) | Flutter widgets — `SideEffectProvider`, `SideEffectListener`, `SideEffectConsumer`, `MultipleSideEffectListener` | `0.2.0` |
 | [`bloc_one_shot_test`](packages/bloc_one_shot_test/) | Test utilities — `blocEffectTest()` | `0.1.0` |
 
 ## Installation
@@ -127,6 +127,25 @@ SideEffectListener<LoginCubit, LoginEffect>(
 )
 ```
 
+**`SideEffectProvider`** — creates/provides a Bloc and listens to effects in one widget:
+
+```dart
+SideEffectProvider<LoginCubit, LoginEffect>(
+  create: (_) => LoginCubit(),
+  listener: (context, effect) {
+    switch (effect) {
+      case NavigateToHome():
+        Navigator.of(context).pushReplacementNamed('/home');
+      case ShowErrorSnackbar(:final message):
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message)),
+        );
+    }
+  },
+  child: LoginForm(),
+)
+```
+
 **`MultipleSideEffectListener`** — listens to effects from multiple blocs without nesting:
 
 ```dart
@@ -197,6 +216,17 @@ blocEffectTest<LoginCubit, LoginState, LoginEffect>(
 | --- | --- |
 | `Stream<Effect> effects` | The stream of side effects |
 | `void emitEffect(Effect effect)` | Emits a side effect |
+
+### `SideEffectProvider<B, E>`
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `create` | `B Function(BuildContext)` | Creates the Bloc (default constructor) |
+| `value` | `B` | Existing Bloc instance (`.value` constructor) |
+| `listener` | `void Function(BuildContext, E)` | Called once per effect |
+| `listenWhen` | `bool Function(E)?` | Optional effect filter |
+| `lazy` | `bool` | Lazily create the Bloc (default: `true`) |
+| `child` | `Widget?` | Child widget |
 
 ### `SideEffectListener<B, E>`
 

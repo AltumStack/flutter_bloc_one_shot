@@ -1,9 +1,10 @@
+<!-- markdownlint-disable MD024 -->
 # flutter_bloc_one_shot
 
 [![pub package](https://img.shields.io/pub/v/flutter_bloc_one_shot.svg)](https://pub.dev/packages/flutter_bloc_one_shot)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Flutter widgets for [`bloc_one_shot`](https://pub.dev/packages/bloc_one_shot). Provides `SideEffectListener`, `SideEffectConsumer`, and `MultipleSideEffectListener` that mirror the `BlocListener`/`BlocConsumer`/`MultiBlocListener` API you already know.
+Flutter widgets for [`bloc_one_shot`](https://pub.dev/packages/bloc_one_shot). Provides `SideEffectProvider`, `SideEffectListener`, `SideEffectConsumer`, and `MultipleSideEffectListener` that mirror the `BlocProvider`/`BlocListener`/`BlocConsumer`/`MultiBlocListener` API you already know.
 
 > **For test utilities** (`blocEffectTest`), see [`bloc_one_shot_test`](https://pub.dev/packages/bloc_one_shot_test).
 
@@ -143,6 +144,64 @@ Widget remounts   →  effect B (was buffered, now delivered)  →  effect C (de
 
 ---
 
+### `SideEffectProvider`
+
+Combines `BlocProvider` and `SideEffectListener` into a single widget. Use this when you need to create (or provide) a Bloc **and** listen to its effects in one step.
+
+```dart
+SideEffectProvider<LoginCubit, LoginEffect>(
+  create: (_) => LoginCubit(),
+  listener: (context, effect) {
+    switch (effect) {
+      case NavigateToHome():
+        Navigator.of(context).pushReplacementNamed('/home');
+      case ShowErrorSnackbar(:final message):
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(message)),
+        );
+    }
+  },
+  child: LoginForm(),
+)
+```
+
+This is equivalent to:
+
+```dart
+BlocProvider(
+  create: (_) => LoginCubit(),
+  child: SideEffectListener<LoginCubit, LoginEffect>(
+    listener: (context, effect) { /* ... */ },
+    child: LoginForm(),
+  ),
+)
+```
+
+#### `.value` constructor
+
+Use `SideEffectProvider.value` to provide an existing Bloc instance (without closing it on dispose):
+
+```dart
+SideEffectProvider<LoginCubit, LoginEffect>.value(
+  value: existingCubit,
+  listener: (context, effect) { /* ... */ },
+  child: LoginForm(),
+)
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `create` | `B Function(BuildContext)` | Yes* | Creates the Bloc (*default constructor only) |
+| `value` | `B` | Yes* | Existing Bloc instance (*.value constructor only) |
+| `listener` | `void Function(BuildContext, E)` | Yes | Called once per effect |
+| `listenWhen` | `bool Function(E)?` | No | Filter — listener only fires when this returns `true` |
+| `lazy` | `bool` | No | Whether to lazily create the Bloc (default: `true`) |
+| `child` | `Widget?` | No | Child widget |
+
+---
+
 ### `MultipleSideEffectListener`
 
 Merges multiple `SideEffectListener` widgets into a single widget tree, avoiding deeply nested listeners. Mirrors `MultiBlocListener` from `flutter_bloc`.
@@ -249,6 +308,7 @@ SideEffectConsumer<CounterCubit, int, CounterEffect>(
 | Scenario | Widget |
 | --- | --- |
 | React to effects only (navigation, snackbar) | `SideEffectListener` |
+| Create/provide a Bloc + listen to effects | `SideEffectProvider` |
 | React to effects from multiple blocs | `MultipleSideEffectListener` |
 | Build UI from state only | `BlocBuilder` (from `flutter_bloc`) |
 | Build UI from state + react to effects | `SideEffectConsumer` |

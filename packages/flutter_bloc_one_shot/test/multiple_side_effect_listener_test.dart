@@ -93,8 +93,9 @@ void main() {
       await cubitB.close();
     });
 
-    testWidgets('each listener receives effects only from its bloc',
-        (tester) async {
+    testWidgets('each listener receives effects only from its bloc', (
+      tester,
+    ) async {
       final cubitA = CubitA();
       final cubitB = CubitB();
       final effectsA = <EffectA>[];
@@ -134,8 +135,7 @@ void main() {
       await cubitB.close();
     });
 
-    testWidgets('both listeners receive effects independently',
-        (tester) async {
+    testWidgets('both listeners receive effects independently', (tester) async {
       final cubitA = CubitA();
       final cubitB = CubitB();
       final effectsA = <EffectA>[];
@@ -172,8 +172,9 @@ void main() {
       await cubitB.close();
     });
 
-    testWidgets('works with blocs provided via BlocProvider context',
-        (tester) async {
+    testWidgets('works with blocs provided via BlocProvider context', (
+      tester,
+    ) async {
       final cubitA = CubitA();
       final cubitB = CubitB();
       final effectsA = <EffectA>[];

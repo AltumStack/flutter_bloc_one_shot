@@ -8,3 +8,4 @@ export 'package:bloc_one_shot/bloc_one_shot.dart';
 export 'src/multiple_side_effect_listener.dart';
 export 'src/side_effect_consumer.dart';
 export 'src/side_effect_listener.dart';
+export 'src/side_effect_provider.dart';
