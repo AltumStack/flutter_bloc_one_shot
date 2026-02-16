@@ -100,7 +100,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState>
 }
 ```
 
-### 4. Listen to effects
+### 4. Batch emit multiple effects
+
+```dart
+// Instead of calling emitEffect multiple times:
+emitEffect(ShowSuccessToast('Saved'));
+emitEffect(NavigateToHome());
+emitEffect(ClearForm());
+
+// Use emitEffects for concise batch emission:
+emitEffects([ShowSuccessToast('Saved'), NavigateToHome(), ClearForm()]);
+```
+
+### 5. Listen to effects
 
 ```dart
 final cubit = AuthCubit();
@@ -131,6 +143,7 @@ A mixin constrained to `BlocBase<State>`, compatible with both `Bloc` and `Cubit
 |---|---|---|
 | `effects` | `Stream<Effect>` | Broadcast stream of side effects |
 | `emitEffect(effect)` | `void` | Emits a side effect — delivered live or buffered |
+| `emitEffects(effects)` | `void` | Emits multiple side effects at once — delegates to `emitEffect` |
 
 The effect controller is automatically closed when the Bloc/Cubit closes.
 
