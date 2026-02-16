@@ -4,6 +4,7 @@
 /// and global [EffectObserver] for logging and analytics.
 library bloc_one_shot;
 
+export 'src/composite_effect_observer.dart';
 export 'src/effect_controller.dart';
 export 'src/effect_observer.dart';
 export 'src/side_effect_mixin.dart';

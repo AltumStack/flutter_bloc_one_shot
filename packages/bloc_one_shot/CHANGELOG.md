@@ -1,3 +1,7 @@
+## 0.2.0
+
+- Add `CompositeEffectObserver` to delegate to multiple `EffectObserver` instances.
+
 ## 0.1.0
 
 - Initial release.
