@@ -4,8 +4,11 @@
 [![flutter_bloc_one_shot](https://img.shields.io/pub/v/flutter_bloc_one_shot.svg?label=flutter_bloc_one_shot)](https://pub.dev/packages/flutter_bloc_one_shot)
 [![bloc_one_shot_test](https://img.shields.io/pub/v/bloc_one_shot_test.svg?label=bloc_one_shot_test)](https://pub.dev/packages/bloc_one_shot_test)
 [![codecov](https://codecov.io/gh/AltumStack/flutter_bloc_one_shot/branch/master/graph/badge.svg)](https://app.codecov.io/github/AltumStack/flutter_bloc_one_shot)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 A side-effect system for Flutter BLoC. Separate **what the screen IS** (state) from **what the screen DOES** (effects).
+
+📖 [Read the full article on Medium](https://medium.com/@amarturelo/side-effects-in-flutter-bloc-2026-transient-states-or-separate-stream-eef506b91a10)
 
 Side effects like navigation, snackbars, and dialogs are ephemeral one-shot actions that don't belong in persistent state. `bloc_one_shot` introduces a **dual-channel architecture** where your Bloc exposes two outputs: **State** and **Effect**.
 
@@ -31,17 +34,17 @@ Modeling side effects as state causes:
 
 ## Packages
 
-| Package | Description | pub.dev |
-|---|---|---|
-| [`bloc_one_shot`](packages/bloc_one_shot/) | Core Dart package — `EffectController`, `SideEffectMixin`, `EffectObserver` | — |
-| [`flutter_bloc_one_shot`](packages/flutter_bloc_one_shot/) | Flutter widgets — `SideEffectListener`, `SideEffectConsumer` | — |
-| [`bloc_one_shot_test`](packages/bloc_one_shot_test/) | Test utilities — `blocEffectTest()` | — |
+| Package | Description | Version |
+| --- | --- | --- |
+| [`bloc_one_shot`](packages/bloc_one_shot/) | Core Dart package — `EffectController`, `SideEffectMixin`, `EffectObserver` | `0.1.0` |
+| [`flutter_bloc_one_shot`](packages/flutter_bloc_one_shot/) | Flutter widgets — `SideEffectListener`, `SideEffectConsumer`, `MultipleSideEffectListener` | `0.2.0` |
+| [`bloc_one_shot_test`](packages/bloc_one_shot_test/) | Test utilities — `blocEffectTest()` | `0.1.0` |
 
 ## Installation
 
 ```yaml
 dependencies:
-  flutter_bloc_one_shot: ^0.1.0
+  flutter_bloc_one_shot: ^0.2.0
 ```
 
 `flutter_bloc_one_shot` re-exports `bloc_one_shot`, so a single dependency is all you need.
@@ -124,6 +127,22 @@ SideEffectListener<LoginCubit, LoginEffect>(
 )
 ```
 
+**`MultipleSideEffectListener`** — listens to effects from multiple blocs without nesting:
+
+```dart
+MultipleSideEffectListener(
+  listeners: [
+    SideEffectListener<AuthBloc, AuthEffect>(
+      listener: (context, effect) { /* ... */ },
+    ),
+    SideEffectListener<NotificationBloc, NotificationEffect>(
+      listener: (context, effect) { /* ... */ },
+    ),
+  ],
+  child: HomePage(),
+)
+```
+
 **`SideEffectConsumer`** — combines state builder + effect listener:
 
 ```dart
@@ -175,23 +194,30 @@ blocEffectTest<LoginCubit, LoginState, LoginEffect>(
 ### `SideEffectMixin<State, Effect>`
 
 | Member | Description |
-|---|---|
+| --- | --- |
 | `Stream<Effect> effects` | The stream of side effects |
 | `void emitEffect(Effect effect)` | Emits a side effect |
 
 ### `SideEffectListener<B, E>`
 
 | Parameter | Type | Description |
-|---|---|---|
+| --- | --- | --- |
 | `listener` | `void Function(BuildContext, E)` | Called once per effect |
 | `bloc` | `B?` | Optional — resolved via `context.read<B>()` |
 | `listenWhen` | `bool Function(E)?` | Optional effect filter |
 | `child` | `Widget?` | Child widget |
 
+### `MultipleSideEffectListener`
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `listeners` | `List<SingleChildWidget>` | List of `SideEffectListener` widgets |
+| `child` | `Widget` | Child widget rendered below all listeners |
+
 ### `SideEffectConsumer<B, S, E>`
 
 | Parameter | Type | Description |
-|---|---|---|
+| --- | --- | --- |
 | `builder` | `Widget Function(BuildContext, S)` | Builds UI from state |
 | `listener` | `void Function(BuildContext, E)` | Called once per effect |
 | `bloc` | `B?` | Optional — resolved via `context.read<B>()` |
@@ -208,7 +234,7 @@ Set `EffectObserver.instance` at app startup to observe all effects globally.
 
 ## How Buffering Works
 
-```
+```text
 Timeline:
   Bloc created        → emitEffect(A)  → emitEffect(B)  → Widget subscribes → emitEffect(C)
   [no listener]         [buffered]        [buffered]        [flush A, B]       [delivered live]
@@ -236,6 +262,25 @@ dart analyze packages/
 # Format check
 dart format --set-exit-if-changed packages/
 ```
+
+## Contributing
+
+Contributions are welcome! To get started:
+
+1. Fork the repo and create your branch from `develop`
+2. Run `dart pub get` to resolve dependencies
+3. Make your changes and add tests
+4. Ensure all checks pass:
+
+   ```bash
+   dart test packages/bloc_one_shot/test/ packages/bloc_one_shot_test/test/
+   flutter test packages/flutter_bloc_one_shot/test/
+   dart analyze packages/
+   dart format --set-exit-if-changed packages/
+   ```
+
+5. Update the CHANGELOG of the affected packages
+6. Open a pull request — the [PR template](.github/PULL_REQUEST_TEMPLATE.md) will guide you through the required information
 
 ## License
 

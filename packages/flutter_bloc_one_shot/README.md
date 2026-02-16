@@ -3,7 +3,7 @@
 [![pub package](https://img.shields.io/pub/v/flutter_bloc_one_shot.svg)](https://pub.dev/packages/flutter_bloc_one_shot)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-Flutter widgets for [`bloc_one_shot`](https://pub.dev/packages/bloc_one_shot). Provides `SideEffectListener` and `SideEffectConsumer` that mirror the `BlocListener`/`BlocConsumer` API you already know.
+Flutter widgets for [`bloc_one_shot`](https://pub.dev/packages/bloc_one_shot). Provides `SideEffectListener`, `SideEffectConsumer`, and `MultipleSideEffectListener` that mirror the `BlocListener`/`BlocConsumer`/`MultiBlocListener` API you already know.
 
 > **For test utilities** (`blocEffectTest`), see [`bloc_one_shot_test`](https://pub.dev/packages/bloc_one_shot_test).
 
@@ -11,7 +11,7 @@ Flutter widgets for [`bloc_one_shot`](https://pub.dev/packages/bloc_one_shot). P
 
 ```yaml
 dependencies:
-  flutter_bloc_one_shot: ^0.1.0
+  flutter_bloc_one_shot: ^0.2.0
 ```
 
 This package re-exports `bloc_one_shot`, so you only need a single dependency for both core and widgets.
@@ -76,7 +76,7 @@ SideEffectListener<LoginCubit, LoginEffect>(
 #### Parameters
 
 | Parameter | Type | Required | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `listener` | `void Function(BuildContext, E)` | Yes | Called once per effect |
 | `bloc` | `B?` | No | If omitted, resolved via `context.read<B>()` |
 | `listenWhen` | `bool Function(E)?` | No | Filter — listener only fires when this returns `true` |
@@ -136,10 +136,56 @@ SideEffectListener<LoginCubit, LoginEffect>(
 
 When a widget unmounts (e.g. during navigation) and remounts later, any effects emitted during the gap are buffered and delivered to the new listener:
 
-```
+```text
 Widget mounts     →  effect A (delivered)  →  Widget unmounts
 Widget remounts   →  effect B (was buffered, now delivered)  →  effect C (delivered live)
 ```
+
+---
+
+### `MultipleSideEffectListener`
+
+Merges multiple `SideEffectListener` widgets into a single widget tree, avoiding deeply nested listeners. Mirrors `MultiBlocListener` from `flutter_bloc`.
+
+```dart
+MultipleSideEffectListener(
+  listeners: [
+    SideEffectListener<AuthBloc, AuthEffect>(
+      listener: (context, effect) {
+        // Handle auth effects (e.g. session expired → navigate to login)
+      },
+    ),
+    SideEffectListener<NotificationBloc, NotificationEffect>(
+      listener: (context, effect) {
+        // Handle notification effects (e.g. show snackbar)
+      },
+    ),
+  ],
+  child: HomePage(),
+)
+```
+
+This is equivalent to nesting them manually:
+
+```dart
+// Without MultipleSideEffectListener (nesting hell)
+SideEffectListener<AuthBloc, AuthEffect>(
+  listener: (context, effect) { /* ... */ },
+  child: SideEffectListener<NotificationBloc, NotificationEffect>(
+    listener: (context, effect) { /* ... */ },
+    child: HomePage(),
+  ),
+)
+```
+
+#### Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `listeners` | `List<SingleChildWidget>` | Yes | List of `SideEffectListener` widgets |
+| `child` | `Widget` | Yes | Child widget rendered below all listeners |
+
+All `SideEffectListener` features (`listenWhen`, `bloc`, context resolution) work inside `MultipleSideEffectListener`.
 
 ---
 
@@ -172,7 +218,7 @@ SideEffectConsumer<LoginCubit, LoginState, LoginEffect>(
 #### Parameters
 
 | Parameter | Type | Required | Description |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | `builder` | `Widget Function(BuildContext, S)` | Yes | Builds UI from state |
 | `listener` | `void Function(BuildContext, E)` | Yes | Called once per effect |
 | `bloc` | `B?` | No | If omitted, resolved via `context.read<B>()` |
@@ -201,8 +247,9 @@ SideEffectConsumer<CounterCubit, int, CounterEffect>(
 ## When to Use What
 
 | Scenario | Widget |
-|---|---|
+| --- | --- |
 | React to effects only (navigation, snackbar) | `SideEffectListener` |
+| React to effects from multiple blocs | `MultipleSideEffectListener` |
 | Build UI from state only | `BlocBuilder` (from `flutter_bloc`) |
 | Build UI from state + react to effects | `SideEffectConsumer` |
 | Listen to state changes (not effects) | `BlocListener` (from `flutter_bloc`) |

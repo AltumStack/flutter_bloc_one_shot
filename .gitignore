@@ -25,3 +25,6 @@ coverage/
 
 # Melos
 .melos/
+
+# Docs (local drafts)
+docs/
