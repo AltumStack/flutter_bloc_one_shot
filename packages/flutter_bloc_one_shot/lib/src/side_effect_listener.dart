@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc_one_shot/bloc_one_shot.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/single_child_widget.dart';
 
 /// Signature for the `listener` callback in [SideEffectListener].
 typedef SideEffectListenerCallback<E> =
@@ -37,7 +38,7 @@ typedef SideEffectListenerCondition<E> = bool Function(E effect);
 /// )
 /// ```
 class SideEffectListener<B extends BlocBase<dynamic>, E>
-    extends StatefulWidget {
+    extends SingleChildStatefulWidget {
   /// Creates a [SideEffectListener].
   ///
   /// The [listener] is required and called once per emitted effect.
@@ -48,7 +49,7 @@ class SideEffectListener<B extends BlocBase<dynamic>, E>
     this.listenWhen,
     this.child,
     super.key,
-  });
+  }) : super(child: child);
 
   /// The bloc or cubit to listen to.
   ///
@@ -66,12 +67,12 @@ class SideEffectListener<B extends BlocBase<dynamic>, E>
   final Widget? child;
 
   @override
-  State<SideEffectListener<B, E>> createState() =>
+  SingleChildState<SideEffectListener<B, E>> createState() =>
       _SideEffectListenerState<B, E>();
 }
 
 class _SideEffectListenerState<B extends BlocBase<dynamic>, E>
-    extends State<SideEffectListener<B, E>> {
+    extends SingleChildState<SideEffectListener<B, E>> {
   StreamSubscription<E>? _subscription;
   late B _bloc;
 
@@ -138,5 +139,6 @@ class _SideEffectListenerState<B extends BlocBase<dynamic>, E>
   }
 
   @override
-  Widget build(BuildContext context) => widget.child ?? const SizedBox.shrink();
+  Widget buildWithChild(BuildContext context, Widget? child) =>
+      child ?? const SizedBox.shrink();
 }
