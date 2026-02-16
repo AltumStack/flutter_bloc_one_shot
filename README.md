@@ -36,7 +36,7 @@ Modeling side effects as state causes:
 
 | Package | Description | Version |
 | --- | --- | --- |
-| [`bloc_one_shot`](packages/bloc_one_shot/) | Core Dart package — `EffectController`, `SideEffectMixin`, `EffectObserver`, `CompositeEffectObserver` | `0.3.0` |
+| [`bloc_one_shot`](packages/bloc_one_shot/) | Core Dart package — `EffectController`, `SideEffectMixin`, `EffectObserver`, `CompositeEffectObserver` | `0.2.0` |
 | [`flutter_bloc_one_shot`](packages/flutter_bloc_one_shot/) | Flutter widgets — `SideEffectProvider`, `SideEffectListener`, `SideEffectConsumer`, `MultipleSideEffectListener` | `0.2.0` |
 | [`bloc_one_shot_test`](packages/bloc_one_shot_test/) | Test utilities — `blocEffectTest()` | `0.1.0` |
 
