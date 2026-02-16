@@ -2,7 +2,7 @@ name: bloc_one_shot
 description: >
   A side-effect system for Flutter BLoC. Provides a buffered EffectController,
   SideEffectMixin for Bloc/Cubit, and global EffectObserver for logging and analytics.
-version: 0.1.0
+version: 0.2.0
 homepage: https://github.com/aspect-build/bloc_one_shot
 repository: https://github.com/aspect-build/bloc_one_shot/tree/main/packages/bloc_one_shot
 
