@@ -44,6 +44,14 @@ class TestCubit extends Cubit<int> with SideEffectMixin<int, TestEffect> {
   void showMessage(String msg) {
     emitEffect(ShowSnackbar(msg));
   }
+
+  void doMultipleThings() {
+    emitEffects([
+      NavigateEffect('/home'),
+      ShowSnackbar('hello'),
+      NavigateEffect('/settings'),
+    ]);
+  }
 }
 
 // Bloc-based
@@ -136,6 +144,93 @@ void main() {
           ShowSnackbar('a'),
           ShowSnackbar('b'),
           ShowSnackbar('c'),
+        ]);
+      });
+    });
+
+    group('emitEffects', () {
+      late TestCubit cubit;
+
+      setUp(() {
+        cubit = TestCubit();
+      });
+
+      tearDown(() async {
+        await cubit.close();
+      });
+
+      test('delivers all effects to stream in order', () async {
+        final effects = <TestEffect>[];
+        cubit.effects.listen(effects.add);
+        await Future<void>.delayed(Duration.zero);
+
+        cubit.emitEffects([
+          NavigateEffect('/home'),
+          ShowSnackbar('hello'),
+          NavigateEffect('/settings'),
+        ]);
+        await Future<void>.delayed(Duration.zero);
+
+        expect(effects, [
+          NavigateEffect('/home'),
+          ShowSnackbar('hello'),
+          NavigateEffect('/settings'),
+        ]);
+      });
+
+      test('does nothing with empty list', () async {
+        final effects = <TestEffect>[];
+        cubit.effects.listen(effects.add);
+        await Future<void>.delayed(Duration.zero);
+
+        cubit.emitEffects([]);
+        await Future<void>.delayed(Duration.zero);
+
+        expect(effects, isEmpty);
+      });
+
+      test('buffers all effects before listener subscribes', () async {
+        cubit.emitEffects([
+          NavigateEffect('/a'),
+          ShowSnackbar('b'),
+        ]);
+
+        final effects = <TestEffect>[];
+        cubit.effects.listen(effects.add);
+        await Future<void>.delayed(Duration.zero);
+
+        expect(effects, [NavigateEffect('/a'), ShowSnackbar('b')]);
+      });
+
+      test('notifies observer for each effect', () async {
+        final observer = _TestObserver();
+        EffectObserver.instance = observer;
+        addTearDown(() => EffectObserver.instance = null);
+
+        cubit.emitEffects([
+          NavigateEffect('/home'),
+          ShowSnackbar('msg'),
+        ]);
+
+        expect(observer.calls, hasLength(2));
+        expect(observer.calls[0].$1, cubit);
+        expect(observer.calls[0].$2, NavigateEffect('/home'));
+        expect(observer.calls[1].$1, cubit);
+        expect(observer.calls[1].$2, ShowSnackbar('msg'));
+      });
+
+      test('works via helper method on cubit', () async {
+        final effects = <TestEffect>[];
+        cubit.effects.listen(effects.add);
+        await Future<void>.delayed(Duration.zero);
+
+        cubit.doMultipleThings();
+        await Future<void>.delayed(Duration.zero);
+
+        expect(effects, [
+          NavigateEffect('/home'),
+          ShowSnackbar('hello'),
+          NavigateEffect('/settings'),
         ]);
       });
     });

@@ -1,3 +1,7 @@
+## 0.3.0
+
+- Add `emitEffects(List<Effect>)` convenience method to `SideEffectMixin` for batch emission.
+
 ## 0.2.0
 
 - Add `CompositeEffectObserver` to delegate to multiple `EffectObserver` instances.

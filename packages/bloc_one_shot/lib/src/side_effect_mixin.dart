@@ -65,6 +65,20 @@ mixin SideEffectMixin<State, Effect> on BlocBase<State> {
     _effectController.add(effect);
   }
 
+  /// Emits multiple side [effects] at once.
+  ///
+  /// Each effect is delegated to [emitEffect], so observer notifications
+  /// and buffering work as expected.
+  ///
+  /// ```dart
+  /// emitEffects([ShowSuccessToast('Saved'), NavigateToHome(), ClearForm()]);
+  /// ```
+  void emitEffects(List<Effect> effects) {
+    for (final effect in effects) {
+      emitEffect(effect);
+    }
+  }
+
   @override
   Future<void> close() {
     _effectController.close();
